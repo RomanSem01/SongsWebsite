@@ -1,0 +1,19 @@
+{% extends 'topsongs/base.html' %}
+{% block content %}
+<h4>{{ playlist.name }}</h4>
+<a href="{% url 'show_user' playlist.user.id %}"><h6>{{ playlist.user.username }}</h6></a>
+<div class="collection">
+    {% for song in songs %}
+    <li class="collection-item" style="list-style-type: none;">
+        <div><a href="{% url 'search_song' song.id %}">{{ song.name }} ({{ song.band.name }})</a>
+            {% if user == playlist.user %}
+            <form action="{% url 'delete_from_playlist' playlist.id song.id %}" class="secondary-content">
+                <button type="submit" class="waves-effect waves-teal btn-flat"><i class="material-icons"
+                        style="font-size: 30px;">delete</i></button>
+            </form>
+            {% endif %}
+        </div>
+    </li>
+    {% endfor %}
+</div>
+{% endblock %}

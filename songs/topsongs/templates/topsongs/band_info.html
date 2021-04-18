@@ -1,0 +1,18 @@
+{% extends 'topsongs/base.html' %}
+{% block content %}
+<div class="center-align">
+    <h4>{{ band.name }}</h4>
+    <p class="flow-text">
+        Year: {{ band.year }}
+        <br>
+        Origin: {{ band.origin }}
+        <br>
+        <br>
+        {{ band.description }}
+    </p>
+
+    {% for song in songs %}
+    <a href="{% url 'search_song' song.id %}"><h4>{{ song.name }}</h4></a>
+    {% endfor %}
+</div>
+{% endblock %}

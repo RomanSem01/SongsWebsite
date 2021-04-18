@@ -1,0 +1,30 @@
+{% extends 'topsongs/base.html' %}
+{% load embed_video_tags %}
+{% block content %}
+<div class="center-align">
+    <h5>{{ song.name }}</h5>
+    <a href="{% url 'band_info' song.band.id %}">
+        <h6>{{ song.band.name }}</h6>
+    </a>
+    {% video song.video 'medium' %}
+</div>
+
+<div class="fixed-action-btn">
+    <a href="{% url 'add_to_playlist' song.id %}"><button class="btn-floating btn-large waves-effect waves-light red"><i
+                class="material-icons">add</i></button></a>
+</div>
+
+<p class="flow-text">
+    Year: {{ song.year }}
+    <br>
+    Genre: {{ song.genre }}
+    <br>
+    {{ song.description }}
+</p>
+
+<script>
+    $(document).ready(function () {
+        $('.fixed-action-btn').floatingActionButton();
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'topsongs/base.html' %}
+{% block content %}
+<div class="fixed-action-btn">
+    <a href="{% url 'create_playlist' %}"><button class="btn-floating btn-large waves-effect waves-light red"><i
+                class="material-icons">add</i></button></a>
+</div>
+
+{% if playlists|length > 0 %}
+<table>
+    {% for playlist in playlists %}
+    <tr>
+        <td>
+            <a href="{% url 'playlist_info' playlist.id %}">
+                <h4>{{ playlist.name }}</h4>
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<h4>There is no playlists yet!</h4>
+{% endif %}
+
+<script>
+    $(document).ready(function () {
+        $('.fixed-action-btn').floatingActionButton();
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <title>Music</title>
+</head>
+
+<body>
+
+    <ul id="slide-out" class="sidenav">
+        <li>
+            <div class="user-view">
+                {% if user.is_authenticated %}
+                <a href="#"><i class="medium material-icons left">account_circle</i>{{ user.username }}</a>
+                <p>
+                <form action="{% url 'logout_user' %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn waves-effect waves-light" type="submit" name="action">Logout
+                        <i class="material-icons right">keyboard_backspace</i>
+                    </button>
+                </form>
+                </p>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'create_playlist' %}">Create Playlist</a></li>
+                <li><a href="{% url 'display_playlists' %}">My Playlists</a></li>
+                <li><a href="{% url 'search_playlists' %}">Search Playlists</a></li>
+                {% else %}
+                <div class="center-align">
+                    <a href="{% url 'home' %}">Home</a>
+                    <br>
+                    <a href="{% url 'login_user' %}">Login</a>
+                    <br>
+                    <a href="{% url 'signup_user' %}">Sign Up</a>
+                </div>
+                {% endif %}
+            </div>
+        </li>
+    </ul>
+    <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons"
+            style="font-size: 50px">menu</i></a>
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('.sidenav').sidenav();
+        });
+    </script>
+</body>
+
+</html>
