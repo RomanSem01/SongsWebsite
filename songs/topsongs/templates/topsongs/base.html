@@ -19,7 +19,8 @@
         <li>
             <div class="user-view">
                 {% if user.is_authenticated %}
-                <a href="{% url 'show_user' user.id %}"><i class="medium material-icons left">account_circle</i>{{ user.username }}</a>
+                <a href="{% url 'show_user' user.id %}"><i class="medium material-icons left">account_circle</i>
+                    {{user.username }}</a>
                 <p>
                 <form action="{% url 'logout_user' %}" method="POST">
                     {% csrf_token %}
@@ -28,20 +29,20 @@
                     </button>
                 </form>
                 </p>
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'create_playlist' %}">Create Playlist</a></li>
-                <li><a href="{% url 'display_playlists' %}">My Playlists</a></li>
-                <li><a href="{% url 'search_playlists' %}">Search Playlists</a></li>
-                {% else %}
-                <div class="center-align">
-                    <a href="{% url 'home' %}">Home</a>
-                    <br>
-                    <a href="{% url 'login_user' %}">Login</a>
-                    <br>
-                    <a href="{% url 'signup_user' %}">Sign Up</a>
-                </div>
-                {% endif %}
-            </div>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'create_playlist' %}">Create Playlist</a></li>
+        <li><a href="{% url 'display_playlists' %}">My Playlists</a></li>
+        <li><a href="{% url 'search_playlists' %}">Search Playlists</a></li>
+        {% else %}
+        <div class="center-align">
+            <a href="{% url 'home' %}">Home</a>
+            <br>
+            <a href="{% url 'login_user' %}">Login</a>
+            <br>
+            <a href="{% url 'signup_user' %}">Sign Up</a>
+        </div>
+        {% endif %}
+        </div>
         </li>
     </ul>
     <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons"
