@@ -6,17 +6,21 @@
 </div>
 
 {% if playlists|length > 0 %}
-<table>
+<div class="collection">
     {% for playlist in playlists %}
-    <tr>
-        <td>
-            <a href="{% url 'playlist_info' playlist.id %}">
-                <h4>{{ playlist.name }}</h4>
-            </a>
-        </td>
-    </tr>
+    <li class="collection-item" style="list-style-type: none;">
+        <div><a href="{% url 'playlist_info' playlist.id %}">{{ playlist.name }}</a>
+            {% if user == playlist.user %}
+            <form action="{% url 'remove_playlist' playlist.id %}" class="secondary-content" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="waves-effect waves-teal btn-flat"><i class="material-icons"
+                        style="font-size: 30px;">delete</i></button>
+            </form>
+            {% endif %}
+        </div>
+    </li>
     {% endfor %}
-</table>
+</div>
 {% else %}
 <h4>There is no playlists yet!</h4>
 {% endif %}

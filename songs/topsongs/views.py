@@ -50,6 +50,14 @@ def create_playlist(request):
 
 
 @login_required
+def remove_playlist(request, playlist_id):
+    playlist = get_object_or_404(Playlist, user=request.user, pk=playlist_id)
+    if request.method == 'POST':
+        playlist.delete()
+        return redirect('display_playlists')
+
+
+@login_required
 def add_to_playlist(request, song_id):
     song = get_object_or_404(Song, pk=song_id)
     if request.method == 'GET':
@@ -67,10 +75,11 @@ def add_to_playlist(request, song_id):
 @login_required
 def delete_from_playlist(request, playlist_id, song_id):
     playlist = get_object_or_404(Playlist, user=request.user, pk=playlist_id)
-    song = get_object_or_404(Song, pk=song_id)
-    playlist.songs.remove(song)
-    playlist.save()
-    return redirect('playlist_info', playlist_id)
+    if request.method == 'POST':
+        song = get_object_or_404(Song, pk=song_id)
+        playlist.songs.remove(song)
+        playlist.save()
+        return redirect('playlist_info', playlist_id)
 
 
 @login_required
