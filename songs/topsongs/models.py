@@ -37,9 +37,19 @@ class Playlist(models.Model):
     name = models.CharField(max_length=100, null=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     songs = models.ManyToManyField(Song)
+    created = models.DateTimeField(auto_now_add=True, null=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = (('name', 'user'))
 
     def __str__(self):
         return self.name
+
+
+class Subscription(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    playlists = models.ManyToManyField(Playlist)
+
+    def __str__(self):
+        return str(self.user)

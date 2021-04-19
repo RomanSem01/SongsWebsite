@@ -31,6 +31,8 @@ urlpatterns = [
     path('playlist/<int:playlist_id>', views.playlist_info, name='playlist_info'),
     path('remove_from_playlist/<int:playlist_id>/<int:song_id>',
          views.delete_from_playlist, name='delete_from_playlist'),
+    path('my_subscriptions/', views.show_subscriptions, name='show_subscriptions'),
+    path('subcribe/<int:playlist_id>', views.subscribe, name='subscribe'),
 
     path('signup/', views.signup_user, name='signup_user'),
     path('login/', views.login_user, name='login_user'),

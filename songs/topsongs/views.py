@@ -1,11 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect, get_list_or_404
-from .models import Song, Band, Genre, Playlist
+from .models import Song, Band, Genre, Playlist, Subscription
 from .forms import RegistrationForm, LoginForm, PlaylistCreationForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+import datetime
 
 
 def home(request):
@@ -68,6 +69,8 @@ def add_to_playlist(request, song_id):
     else:
         playlist = get_object_or_404(
             Playlist, user=request.user, name=request.POST.get('playlist_name'))
+        playlist.updated = datetime.datetime.now()
+        playlist.save()
         playlist.songs.add(song)
         return redirect('home')
 
@@ -107,6 +110,26 @@ def playlist_info(request, playlist_id):
     songs = playlist.songs.all()
     context = {'playlist': playlist, 'songs': songs}
     return render(request, 'topsongs/playlist_info.html', context)
+
+
+@login_required
+def show_subscriptions(request):
+    subs = get_object_or_404(Subscription, user=request.user)
+    playlists = subs.playlists.all()
+    context = {'playlists': playlists}
+    return render(request, 'topsongs/show_subscriptions.html', context)
+
+
+@login_required
+def subscribe(request, playlist_id):
+    playlist = get_object_or_404(Playlist, pk=playlist_id)
+    if request.method == 'POST':
+        if request.user != playlist.user:
+            new_sub = Subscription.objects.get_or_create(user=request.user)[0]
+            new_sub.save()
+            new_sub.playlists.add(playlist)
+            new_sub.save()
+            return redirect('show_subscriptions')
 
 
 def signup_user(request):

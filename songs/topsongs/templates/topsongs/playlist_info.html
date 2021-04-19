@@ -1,7 +1,9 @@
 {% extends 'topsongs/base.html' %}
 {% block content %}
 <h4>{{ playlist.name }}</h4>
-<a href="{% url 'show_user' playlist.user.id %}"><h6>{{ playlist.user.username }}</h6></a>
+<a href="{% url 'show_user' playlist.user.id %}">
+    <h6>{{ playlist.user.username }}</h6>
+</a>
 <div class="collection">
     {% for song in songs %}
     <li class="collection-item" style="list-style-type: none;">
@@ -17,4 +19,12 @@
     </li>
     {% endfor %}
 </div>
+{% if user != playlist.user %}
+<div class="fixed-action-btn">
+    <form action="{% url 'subscribe' playlist.id %}" method="POST">
+        {% csrf_token %}
+        <button class="btn-floating btn-large waves-effect waves-light red">Sub</button>
+    </form>
+</div>
+{% endif %}
 {% endblock %}

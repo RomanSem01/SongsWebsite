@@ -1,0 +1,11 @@
+{% extends 'topsongs/base.html' %}
+{% block content %}
+<h4>My Subscriptions</h4>
+<div class="collection">
+    {% for playlist in playlists %}
+    <li class="collection-item" style="list-style-type: none;">
+        <div><a href="{% url 'playlist_info' playlist.id %}">{{ playlist.name }} by {{ playlist.user }}</a></div>
+    </li>
+    {% endfor %}
+</div>
+{% endblock %}
