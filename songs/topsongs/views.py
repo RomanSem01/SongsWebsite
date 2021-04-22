@@ -16,7 +16,15 @@ def home(request):
         return redirect('song/{}'.format(song.pk))
 
     songs = Song.objects.all()
-    context = {'songs': songs}
+    if request.user.is_authenticated:
+        subs = request.user.subscription_set.all()
+        if len(subs) > 0:
+            playlists = subs[0].playlists.all().order_by('-updated')
+        else:
+            playlists = []
+        context = {'songs': songs, 'subs': subs, 'playlists': playlists}
+    else:
+        context = {'songs': songs}
     return render(request, 'topsongs/home.html', context)
 
 

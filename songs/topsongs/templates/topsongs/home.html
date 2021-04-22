@@ -6,10 +6,9 @@
             <div class="input-field col s12">
                 <form method="POST" action="{% url 'home' %}">
                     {% csrf_token %}
-
-                    <input placeholder="Search" type="text" id="song" class="autocomplete" name="song_name" autocomplete="off">
+                    <input placeholder="Search" type="text" id="song" class="autocomplete" name="song_name"
+                        autocomplete="off">
                     <br>
-
                     <button class="btn waves-effect waves-light" type="submit" name="action">Search
                         <i class="material-icons right">send</i>
                     </button>
@@ -19,22 +18,39 @@
     </div>
 </div>
 
-<script>
- $(document).ready(function(){
-     function getID(url) {
-        var ID = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-        return ID[2];
-     }
 
-    var sngs = {
+{% if user.is_authenticated %}
+<div class="collection">
+    {% for playlist in playlists %}
+    <li class="collection-item" style="list-style-type: none;">
+        <div><a href="{% url 'playlist_info' playlist.id %}">{{ playlist.name }} by {{ playlist.user }}</a>
+            <form action="{% url 'unsubscribe' playlist.id %}" class="secondary-content" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="waves-effect waves-teal btn-flat"><i class="material-icons"
+                        style="font-size: 30px;">delete</i></button>
+            </form>
+        </div>
+    </li>
+    {% endfor %}
+</div>
+{% endif %}
+
+<script>
+    $(document).ready(function () {
+        function getID(url) {
+            var ID = url.replace(/(>|<)/gi, '').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+            return ID[2];
+        }
+
+        var sngs = {
     {% for song in songs %}
         "{{ song.name }} ({{ song.band.name }})": "http://img.youtube.com/vi/" + getID("{{ song.video }}" + "/0.jpg"),
-    {% endfor %}
+            {% endfor %}
   }
 
-    $('input.autocomplete').autocomplete({
-      data: sngs,
-    });
+        $('input.autocomplete').autocomplete({
+            data: sngs,
+        });
   });
 
 </script>
