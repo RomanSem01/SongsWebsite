@@ -132,6 +132,16 @@ def subscribe(request, playlist_id):
             return redirect('show_subscriptions')
 
 
+@login_required
+def unsubscribe(request, playlist_id):
+    subs = get_object_or_404(Subscription, user=request.user)
+    if request.method == 'POST':
+        playlist = get_object_or_404(Playlist, pk=playlist_id)
+        subs.playlists.remove(playlist)
+        subs.save()
+        return redirect('show_subscriptions')
+
+
 def signup_user(request):
     if request.method == 'GET':
         context = {'form': RegistrationForm()}
