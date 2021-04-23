@@ -28,6 +28,51 @@ def home(request):
     return render(request, 'topsongs/home.html', context)
 
 
+def signup_user(request):
+    if request.method == 'GET':
+        context = {'form': RegistrationForm()}
+        return render(request, 'topsongs/signup_user.html', context)
+    else:
+        if request.POST['password1'] == request.POST['password2']:
+            try:
+                user = User.objects.create_user(username=request.POST['username'],
+                                                password=request.POST['password1'])
+                user.save()
+                login(request, user)
+                return redirect('home')
+            except IntegrityError:
+                context = {'form': RegistrationForm(
+                ), 'error': 'That username has already been taken'}
+                return render(request, 'topsongs/signup_user.html', context)
+        else:
+            context = {'form': RegistrationForm(
+            ), 'error': 'Passwords did not match'}
+            return render(request, 'topsongs/signup_user.html', context)
+
+
+def login_user(request):
+    if request.method == 'GET':
+        context = {'form': LoginForm()}
+        return render(request, 'topsongs/login_user.html', context)
+    else:
+        user = authenticate(
+            request, username=request.POST['username'], password=request.POST['password'])
+        if user is None:
+            context = {
+                'form': LoginForm(), 'error': 'Username or password is incorrect'}
+            return render(request, 'topsongs/login_user.html', context)
+
+        login(request, user)
+        return redirect('home')
+
+
+@login_required
+def logout_user(request):
+    if request.method == 'POST':
+        logout(request)
+        return redirect('home')
+
+
 def search_song(request, song_id):
     song = get_object_or_404(Song, pk=song_id)
     context = {'song': song}
@@ -148,51 +193,6 @@ def unsubscribe(request, playlist_id):
         subs.playlists.remove(playlist)
         subs.save()
         return redirect('show_subscriptions')
-
-
-def signup_user(request):
-    if request.method == 'GET':
-        context = {'form': RegistrationForm()}
-        return render(request, 'topsongs/signup_user.html', context)
-    else:
-        if request.POST['password1'] == request.POST['password2']:
-            try:
-                user = User.objects.create_user(username=request.POST['username'],
-                                                password=request.POST['password1'])
-                user.save()
-                login(request, user)
-                return redirect('home')
-            except IntegrityError:
-                context = {'form': RegistrationForm(
-                ), 'error': 'That username has already been taken'}
-                return render(request, 'topsongs/signup_user.html', context)
-        else:
-            context = {'form': RegistrationForm(
-            ), 'error': 'Passwords did not match'}
-            return render(request, 'topsongs/signup_user.html', context)
-
-
-def login_user(request):
-    if request.method == 'GET':
-        context = {'form': LoginForm()}
-        return render(request, 'topsongs/login_user.html', context)
-    else:
-        user = authenticate(
-            request, username=request.POST['username'], password=request.POST['password'])
-        if user is None:
-            context = {
-                'form': LoginForm(), 'error': 'Username or password is incorrect'}
-            return render(request, 'topsongs/login_user.html', context)
-
-        login(request, user)
-        return redirect('home')
-
-
-@login_required
-def logout_user(request):
-    if request.method == 'POST':
-        logout(request)
-        return redirect('home')
 
 
 @login_required

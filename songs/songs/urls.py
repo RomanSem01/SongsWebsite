@@ -20,8 +20,13 @@ from topsongs import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
+
+    # searching
     path('song/<int:song_id>', views.search_song, name='search_song'),
     path('band/<int:band_id>', views.band_info, name='band_info'),
+    path('show_user/<int:user_id>', views.show_user, name='show_user'),
+
+    # playlists
     path('create_playlist/', views.create_playlist, name='create_playlist'),
     path('remove_playlist/<int:playlist_id>', views.remove_playlist, name='remove_playlist'),
     path('search_playlists/', views.search_playlists, name='search_playlists'),
@@ -31,12 +36,14 @@ urlpatterns = [
     path('playlist/<int:playlist_id>', views.playlist_info, name='playlist_info'),
     path('remove_from_playlist/<int:playlist_id>/<int:song_id>',
          views.delete_from_playlist, name='delete_from_playlist'),
+    
+    # subscriptions
     path('my_subscriptions/', views.show_subscriptions, name='show_subscriptions'),
     path('subcribe/<int:playlist_id>', views.subscribe, name='subscribe'),
     path('unsubscribe/<int:playlist_id>', views.unsubscribe, name='unsubscribe'),
 
+    # auth
     path('signup/', views.signup_user, name='signup_user'),
     path('login/', views.login_user, name='login_user'),
     path('logout/', views.logout_user, name='logout_user'),
-    path('show_user/<int:user_id>', views.show_user, name='show_user'),
 ]
