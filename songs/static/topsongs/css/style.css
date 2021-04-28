@@ -1,0 +1,11 @@
+body {
+    background-color: #DFCEB9;
+}
+
+.row {
+    text-align: center;
+}
+
+::placeholder {
+    color: blue;
+  }
